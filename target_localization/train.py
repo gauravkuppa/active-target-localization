@@ -99,7 +99,7 @@ def main(args: argparse.Namespace):
         # Print/display results every log_freq episodes
         if episode > 0 and episode % log_freq == 0:
             reward_list.append(mean_reward.item() / log_freq)
-            vis.line(X=np.arange(len(reward_list)), Y=reward_list, win='reward', env=args.sess)
+            vis.line(X=np.arange(len(reward_list)), Y=np.array(reward_list), win='reward', env=args.sess)
             mean_reward = mean_reward // log_freq
             print(f"Episode: {episode}\tAverage Reward: {mean_reward}")
             mean_reward = 0
