@@ -8,6 +8,7 @@ import json
 from target_localization.models.td3 import TD3
 from target_localization.util.replay_buffer import ReplayBuffer
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 def main(args: argparse.Namespace):
     num_targets = args.num_targets
@@ -65,7 +66,7 @@ def main(args: argparse.Namespace):
     mean_reward, ep_reward = 0, 0
     
     # Training loop
-    for episode in range(num_episodes):
+    for episode in tqdm(range(num_episodes)):
         state = env.reset()
         for t in range(num_iters):
             # use the actor network to select an action and add noise to facilitate exploration
