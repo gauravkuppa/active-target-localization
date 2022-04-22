@@ -9,6 +9,7 @@ from target_localization.models.td3 import TD3
 from target_localization.util.replay_buffer import ReplayBuffer
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+import math
 
 def main(args: argparse.Namespace):
     num_targets = args.num_targets
@@ -43,7 +44,7 @@ def main(args: argparse.Namespace):
 
     # Initializing the environment parameters
     env.env_parametrization(num_targets=num_targets, reward_type=reward_type, image_representation=image_representation, \
-        vis=(vis, args.sess), meas_model=args.meas_model, static_target=args.static_target, augment_state=not args.no_augmented_state, im_loss=args.im_loss)
+        vis=(vis, args.sess), meas_model=args.meas_model, static_target=args.no_static_target, augment_state=not args.no_augmented_state, im_loss=args.im_loss)
     
     # Dimensions and max action magnitude
     observation_space = 1 if env.observation_space.shape == () else env.observation_space.shape[0]
@@ -89,6 +90,8 @@ def main(args: argparse.Namespace):
         # Update the policy by sampling from the replay buffer
         policy.update(replay_buffer, t, batch_size, args.gamma, args.tau, args.policy_noise, args.policy_delay)
         print(f'reward: {ep_reward}')
+        if math.isnan(ep_reward):
+            break
         ep_rewards.append(ep_reward)
         ep_reward = 0
 
