@@ -116,7 +116,7 @@ def get_args():
     parser.add_argument('--num_iters', type=int, default=60)
     parser.add_argument('--render', action='store_true')
     parser.add_argument('--reward_type', type=str, default='heatmap')
-    parser.add_argument('--static_target', action='store_false')
+    parser.add_argument('--no_static_target', action='store_false')
     parser.add_argument('--image_representation', action='store_true')
     parser.add_argument('--sess', type=str, default='atl')
     parser.add_argument('--meas_model', type=str, default='bearing')
