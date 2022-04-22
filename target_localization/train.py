@@ -43,7 +43,7 @@ def main(args: argparse.Namespace):
 
     # Initializing the environment parameters
     env.env_parametrization(num_targets=num_targets, reward_type=reward_type, image_representation=image_representation, \
-        vis=(vis, args.sess), meas_model=args.meas_model, augment_state=not args.no_augmented_state, im_loss=args.im_loss)
+        vis=(vis, args.sess), meas_model=args.meas_model, static_target=args.static_target, augment_state=not args.no_augmented_state, im_loss=args.im_loss)
     
     # Dimensions and max action magnitude
     observation_space = 1 if env.observation_space.shape == () else env.observation_space.shape[0]
@@ -64,7 +64,7 @@ def main(args: argparse.Namespace):
             env.convnet.load_state_dict(torch.load(convnet_path))
     
     mean_reward, ep_reward = 0, 0
-    
+    ep_rewards = []
     # Training loop
     for episode in tqdm(range(num_episodes)):
         state = env.reset()
@@ -89,6 +89,7 @@ def main(args: argparse.Namespace):
         # Update the policy by sampling from the replay buffer
         policy.update(replay_buffer, t, batch_size, args.gamma, args.tau, args.policy_noise, args.policy_delay)
         print(f'reward: {ep_reward}')
+        ep_rewards.append(ep_reward)
         ep_reward = 0
 
         # Save actor critic weights
@@ -104,7 +105,8 @@ def main(args: argparse.Namespace):
             mean_reward = mean_reward // log_freq
             print(f"Episode: {episode}\tAverage Reward: {mean_reward}")
             mean_reward = 0
-
+    plt.plot(np.arange(len(ep_rewards)), np.array(ep_rewards))
+    plt.savefig("{}_{}episodes_{}reward_rewards.png".format(args.sess, args.num_episodes, args.reward_type))
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -114,6 +116,7 @@ def get_args():
     parser.add_argument('--num_iters', type=int, default=60)
     parser.add_argument('--render', action='store_true')
     parser.add_argument('--reward_type', type=str, default='heatmap')
+    parser.add_argument('--static_target', action='store_false')
     parser.add_argument('--image_representation', action='store_true')
     parser.add_argument('--sess', type=str, default='atl')
     parser.add_argument('--meas_model', type=str, default='bearing')

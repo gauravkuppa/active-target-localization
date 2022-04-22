@@ -149,16 +149,16 @@ class TD3(object):
     def load(self, directory, name):
         self.load_actor(directory, name)
         
-        self.critic_1.load_state_dict(torch.load(f'{directory}/{name}_crtic_1.pth'))
-        self.critic_1_target.load_state_dict(torch.load(f'{directory}/{name}_critic_1_target.pth'))
+        self.critic_1.load_state_dict(torch.load(f'{directory}/{name}_crtic_1.pth', map_location=torch.device('cpu')))
+        self.critic_1_target.load_state_dict(torch.load(f'{directory}/{name}_critic_1_target.pth', map_location=torch.device('cpu')))
         
-        self.critic_2.load_state_dict(torch.load(f'{directory}/{name}_crtic_2.pth'))
-        self.critic_2_target.load_state_dict(torch.load(f'{directory}/{name}_critic_2_target.pth'))
+        self.critic_2.load_state_dict(torch.load(f'{directory}/{name}_crtic_2.pth', map_location=torch.device('cpu')))
+        self.critic_2_target.load_state_dict(torch.load(f'{directory}/{name}_critic_2_target.pth', map_location=torch.device('cpu')))
         
         
     def load_actor(self, directory, name):
-        self.actor.load_state_dict(torch.load(f'{directory}/{name}_actor.pth'))
-        self.actor_target.load_state_dict(torch.load(f'{directory}/{name}_actor_target.pth'))
+        self.actor.load_state_dict(torch.load(f'{directory}/{name}_actor.pth', map_location=torch.device('cpu')))
+        self.actor_target.load_state_dict(torch.load(f'{directory}/{name}_actor_target.pth', map_location=torch.device('cpu')))
         
         
         
