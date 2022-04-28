@@ -91,7 +91,7 @@ def main(args: argparse.Namespace):
         policy.update(replay_buffer, t, batch_size, args.gamma, args.tau, args.policy_noise, args.policy_delay)
         print(f'reward: {ep_reward}')
         if math.isnan(ep_reward):
-            break
+            from IPython import embed; embed()
         ep_rewards.append(ep_reward)
         ep_reward = 0
 
@@ -109,7 +109,8 @@ def main(args: argparse.Namespace):
             print(f"Episode: {episode}\tAverage Reward: {mean_reward}")
             mean_reward = 0
     plt.plot(np.arange(len(ep_rewards)), np.array(ep_rewards))
-    plt.savefig("{}_{}episodes_{}reward_rewards.png".format(args.sess, args.num_episodes, args.reward_type))
+    plt.show()
+    #plt.savefig("{}_{}episodes_{}reward_rewards.png".format(args.sess, args.num_episodes, args.reward_type))
 
 def get_args():
     parser = argparse.ArgumentParser()

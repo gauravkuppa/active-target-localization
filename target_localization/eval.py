@@ -15,7 +15,6 @@ def eval_rl_agent_strategy(args, env, policy, ep=0):
     uncertainties = np.zeros(args.num_iters)
     state = env.reset()
     target_pos = env._get_true_target_position().numpy()
-
     for t in range(args.num_iters):
         action = policy.select_action(state)
         state, reward, done, _ = env.step(action)

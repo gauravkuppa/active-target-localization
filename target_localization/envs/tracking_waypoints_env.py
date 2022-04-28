@@ -2,6 +2,7 @@ import os
 import copy
 import numpy as np
 import torch
+import math
 
 import gym
 from gym import error, spaces
@@ -161,6 +162,7 @@ class TrackingWaypointsEnv(gym.GoalEnv):
         if self.reward_type == 'heatmap':
             plt.plot(self.predictions[:,0], self.predictions[:,1], 'o', c=np.array([1,1,0]))
         plt.axis('equal')
+        #plt.savefig("sess={}_frames_dynamic/sess={},iter={}_rewards.png".format(sess,sess, t))
         plt.pause(0.001)
 
 
@@ -207,7 +209,8 @@ class TrackingWaypointsEnv(gym.GoalEnv):
             if distance < self.len_workspace/100:
                 reward = torch.tensor(100) if sparse else reward
                 done = True
-        
+        if math.isnan(reward):
+            from IPython import embed; embed()
         return reward, done
 
     # Extension methods
